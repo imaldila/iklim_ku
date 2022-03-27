@@ -55,7 +55,10 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
                 const Spacer(),
-                Text(dataModel.cityName, style: kCityName),
+                Text(
+                  dataModel.cityName,
+                  style: kCityName,
+                ),
                 Text(
                   '${dataModel.temp} ° ',
                   style: kTemp,
