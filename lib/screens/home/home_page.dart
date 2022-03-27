@@ -1,29 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
+
+import 'package:iklimku/constants.dart';
+
+import 'package:iklimku/models/weather_data.dart';
+import 'package:iklimku/services/networking.dart';
+import 'package:iklimku/services/weather.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/city_name.dart';
+import '../../models/data_model.dart';
 import '../../services/location.dart';
 import 'components/search_city.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  final location = Location();
-  @override
-  void initState() {
-    super.initState();
-    // print(location.determinePosition());
-  }
-
-  @override
   Widget build(BuildContext context) {
+    WeatherModel weather = WeatherModel();
+    WeatherData _weatherData = WeatherData();
+    final dataModel = context.watch<DataModel>();
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(
@@ -44,10 +40,7 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(height: 16),
                 Text(
                   'Sunny Day Walk',
-                  style: GoogleFonts.inter(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: kTitleDesc,
                 ),
                 const Spacer(),
                 Center(
@@ -57,26 +50,22 @@ class _HomePageState extends State<HomePage> {
                 ),
                 Center(
                   child: Text(
-                    'Cloudy',
-                    style: GoogleFonts.inter(fontSize: 16),
+                    dataModel.weatherStatus,
+                    style: kWeatherStats,
                   ),
                 ),
                 const Spacer(),
+                Text(dataModel.cityName, style: kCityName),
                 Text(
-                  'Bandung',
-                  style: GoogleFonts.inter(
-                    fontSize: 32,
-                    fontWeight: FontWeight.w200,
-                  ),
+                  '${dataModel.temp} ° ',
+                  style: kTemp,
                 ),
-                Text(
-                  '24*',
-                  style: GoogleFonts.inter(
-                      fontSize: 44, fontWeight: FontWeight.bold),
+                const SizedBox(
+                  height: 16,
                 ),
                 ElevatedButton(
-                    onPressed: () {
-                      print(location.getCurrentLocation());
+                    onPressed: () async {
+                      print(dataModel.weatherIcon.toList());
                     },
                     child: Text('Button')),
               ],

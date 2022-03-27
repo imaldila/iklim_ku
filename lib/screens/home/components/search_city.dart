@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:iklimku/models/city_name.dart';
+import 'package:iklimku/models/data_model.dart';
+
+import 'package:iklimku/services/weather.dart';
 import 'package:provider/provider.dart';
 
 class SearchCity extends StatelessWidget {
@@ -11,12 +13,20 @@ class SearchCity extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WeatherModel weather = WeatherModel();
+
     final cityNameController = TextEditingController();
-    return Consumer<CityName>(
+    return Consumer<DataModel>(
       builder: (context, value, child) {
         return TextFormField(
           controller: cityNameController,
           keyboardType: TextInputType.text,
+          textInputAction: TextInputAction.search,
+          textCapitalization: TextCapitalization.words,
+          onFieldSubmitted: (_) async {
+            var weatherData = await weather.getCityWeather(value.cityName);
+            value.updateCityName(weatherData);
+          },
           onChanged: value.getCityName,
           textAlign: TextAlign.center,
           decoration: InputDecoration(
@@ -38,8 +48,12 @@ class SearchCity extends StatelessWidget {
             suffixIcon: Padding(
               padding: const EdgeInsetsDirectional.only(end: 16),
               child: InkWell(
-                onTap: () {
-                  print(value.cityName);
+                onTap: () async {
+                  var weatherData =
+                      await weather.getCityWeather(value.cityName);
+                  value.updateCityName(weatherData);
+                  // print(weatherData);
+
                   FocusScope.of(context).unfocus();
                 },
                 child: SvgPicture.asset(

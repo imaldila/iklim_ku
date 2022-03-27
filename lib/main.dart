@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:iklimku/models/temperature.dart';
 import 'package:iklimku/screens/home/home_page.dart';
 import 'package:provider/provider.dart';
 
-import 'models/city_name.dart';
+import 'models/data_model.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,8 +16,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<CityName>(
-          create: (context) => CityName(),
+        ChangeNotifierProvider<DataModel>(
+          create: (context) => DataModel(),
+        ),
+        ChangeNotifierProvider<Temperature>(
+          create: (context) => Temperature(),
         ),
       ],
       child: const MaterialApp(
